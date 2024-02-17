@@ -20,9 +20,9 @@
             var saveChangesParams = new RemoteDbSetSaveChangesParams();
             foreach (var dbSet in _remoteDbSets)
             {
-                saveChangesParams.AddEntities.AddRange(dbSet.GetAddedEntities());
-                saveChangesParams.UpdatedEntities.AddRange(dbSet.GetUpdatedEntities());
-                saveChangesParams.DeletedEntities.AddRange(dbSet.GetDeletedEntities());
+                saveChangesParams.AddEntities.AddRange(dbSet.GetAndRemoveAddedEntities());
+                saveChangesParams.UpdatedEntities.AddRange(dbSet.GetAndRemoveUpdatedEntities());
+                saveChangesParams.DeletedEntities.AddRange(dbSet.GetAndRemoveDeletedEntities());
             }
 
             if (saveChangesParams.HaveItems)

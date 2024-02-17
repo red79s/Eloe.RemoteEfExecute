@@ -3,8 +3,8 @@
     public interface IRemoteDbSetBase
     {
         void Clear();
-        List<SerializedEntity> GetAddedEntities();
-        List<SerializedEntity> GetUpdatedEntities();
-        List<SerializedEntity> GetDeletedEntities();
+        List<SerializedEntity> GetAndRemoveAddedEntities();
+        List<SerializedEntity> GetAndRemoveUpdatedEntities();
+        List<SerializedEntity> GetAndRemoveDeletedEntities();
     }
 }

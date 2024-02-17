@@ -102,7 +102,7 @@ namespace Eloe.RemoteEfExecute
             return new RemoteDbSet<T>(_dbSetName, _remoteDbSetExecuter, npps, _whereExpressions);
         }
 
-        public List<SerializedEntity> GetAddedEntities()
+        public List<SerializedEntity> GetAndRemoveAddedEntities()
         {
             var typeName = typeof(T).FullName;
             if (typeName == null)
@@ -115,10 +115,12 @@ namespace Eloe.RemoteEfExecute
                 list.Add(new SerializedEntity { DbSetName = _dbSetName, TypeName = typeName, SerializedValue = seralizedValue });
             }
 
+            _addedEntities.Clear();
+
             return list;
         }
 
-        public List<SerializedEntity> GetUpdatedEntities()
+        public List<SerializedEntity> GetAndRemoveUpdatedEntities()
         {
             var typeName = typeof(T).FullName;
             if (typeName == null)
@@ -131,10 +133,12 @@ namespace Eloe.RemoteEfExecute
                 list.Add(new SerializedEntity { DbSetName = _dbSetName, TypeName = typeName, SerializedValue = seralizedValue });
             }
 
+            _updatedEntities.Clear();
+
             return list;
         }
 
-        public List<SerializedEntity> GetDeletedEntities()
+        public List<SerializedEntity> GetAndRemoveDeletedEntities()
         {
             var typeName = typeof(T).FullName;
             if (typeName == null)
@@ -146,6 +150,8 @@ namespace Eloe.RemoteEfExecute
                 var seralizedValue = System.Text.Json.JsonSerializer.Serialize(entity);
                 list.Add(new SerializedEntity { DbSetName = _dbSetName, TypeName = typeName, SerializedValue = seralizedValue });
             }
+
+            _deletedEntities.Clear();
 
             return list;
         }
