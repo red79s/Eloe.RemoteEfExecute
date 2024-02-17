@@ -5,6 +5,12 @@ VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eloe.RemoteEfExecute", "Eloe.RemoteEfExecute.csproj", "{B838890B-EDE2-4DE6-B791-EE1BA14BC6A3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8228CBCF-6CB4-4A4F-B770-C680EE13A777}"
+	ProjectSection(SolutionItems) = preProject
+		Pack and publish nuget.txt = Pack and publish nuget.txt
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
