@@ -1,6 +1,6 @@
 Use developer PowerShell, navigate to project directory
 
-dotnet pack --include-source --include-symbols -p:PackageVersion=1.0.3
+dotnet pack --include-source --include-symbols -p:PackageVersion=1.0.5
 
 Go to Sonatype Nexus and upload package
 http://192.168.1.250:8081/#browse/upload

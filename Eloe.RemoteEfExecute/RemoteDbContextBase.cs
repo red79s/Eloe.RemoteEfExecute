@@ -1,4 +1,6 @@
-﻿namespace Eloe.RemoteEfExecute
+﻿using System.Runtime.CompilerServices;
+
+namespace Eloe.RemoteEfExecute
 {
     public class RemoteDbContextBase
     {
@@ -10,9 +12,16 @@
             _executer = executer;
         }
 
-        protected void AddRemoteDbSet(IRemoteDbSetBase remoteDbSet)
+        protected IRemoteDbSetBase AddRemoteDbSet(IRemoteDbSetBase remoteDbSet)
         {
             _remoteDbSets.Add(remoteDbSet);
+            return remoteDbSet;
+        }
+
+        protected IRemoteDbSet<T> InitializeRemoteDbSet<T>(IRemoteDbSet<T> dbSet, [CallerArgumentExpression("dbSet")] string dbSetName = "") where T : class
+        {
+            dbSet = new RemoteDbSet<T>(dbSetName, _executer);
+            return dbSet;
         }
 
         public async Task<int> SaveChangesAsync()

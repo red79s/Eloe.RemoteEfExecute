@@ -1,4 +1,8 @@
-﻿namespace Eloe.RemoteEfExecute
+﻿using Microsoft.EntityFrameworkCore;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+
+namespace Eloe.RemoteEfExecute
 {
     public class ExecuteEfManagerBase
     {
@@ -7,9 +11,51 @@
         {
         }
 
-        protected void AddDbSetExecuter(IExecuteDbSet executer)
+        public void AddDbSetExecuter(IExecuteDbSet executer)
         {
             _dbSetExecuters.Add(executer);
+        }
+
+        public void Add<T>(DbSet<T> dbSet, [CallerArgumentExpression("dbSet")] string dbSetName = "") where T : class
+        {
+            var index = dbSetName.IndexOf('.');
+            var name = index >= 0 ? dbSetName.Substring(index + 1) : dbSetName;
+            var ex = new EfCoreExecuteDbSet<T>(name, dbSet);
+            AddDbSetExecuter(ex);
+        }
+
+        public void AddAllDbSets(DbContext context)
+        {
+            var properties = context.GetType().GetProperties();
+
+            foreach (var property in properties)
+            {
+                var setType = property.PropertyType;
+
+                var isDbSet = setType.IsGenericType && (typeof(DbSet<>).IsAssignableFrom(setType.GetGenericTypeDefinition()));
+
+                if (isDbSet)
+                {
+                    var ga = property.PropertyType.GetGenericArguments();
+                    if (ga.Length != 1)
+                        continue;
+
+                    var dbSetName = property.Name;
+
+                    var inst = property.GetValue(context, null);
+
+                    var t = typeof(EfCoreExecuteDbSet<>);
+                    Type[] typeArgs = { ga[0] };
+                    var genericType = t.MakeGenericType(typeArgs);
+                    object executer = Activator.CreateInstance(genericType, new object[] { dbSetName, inst });
+                    AddDbSetExecuter((IExecuteDbSet)executer);
+                }
+            }
+        }
+
+        public List<IExecuteDbSet> GetDbSetExecuters()
+        { 
+            return _dbSetExecuters; 
         }
 
         public string? FirstOrDefault(string dbSet, List<string> includes, List<string> expressions)
